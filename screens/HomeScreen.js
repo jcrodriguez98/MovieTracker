@@ -12,7 +12,7 @@ function Items() {
     db.transaction((tx) => {
       console.log("selecting movies");
       tx.executeSql(
-        `select * from movies where watched = 0;`,
+        "select * from movies;", [],
         (_, { rows: { _array } }) => setItems(_array)
       );
     });
@@ -21,6 +21,9 @@ function Items() {
   if (items === null || items.length === 0) {
     console.log("items is null")
     return null;
+  }
+  else {
+    console.log("items not empty");
   }
 
   return (

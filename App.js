@@ -20,7 +20,7 @@ export default function App() {
     console.log("creating table");
     db.transaction((tx) => {
       tx.executeSql(
-        "drop table movies;"
+        "--drop table movies;"
       );
       tx.executeSql(
         "create table if not exists movies (id INTEGER primary key not null, movieName text, watched int);"
