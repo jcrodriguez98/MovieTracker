@@ -1,8 +1,14 @@
 import {useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Pressable } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 import { Ionicons } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Constants from "expo-constants";
+
+import HomeScreen from './screens/HomeScreen.js';
+import AddMovie from './screens/AddMovie.js';
 
 function openDatabase() {
   if (Platform.OS === "web") {
@@ -21,54 +27,32 @@ const db = SQLite.openDatabase("db.db");
 
 const db = openDatabase();
 
-function Items() {
-  const [items, setItems] = useState(null);
-
-  return ( 
-    <View style={styles.sectionContainer}>
-      <Text style={styles.sectionHeading}>{heading}</Text>
-      {items.map(({ id, done, value, itemDate }) => (
-        <TouchableOpacity
-          key={id}
-          onPress={() => onPressItem && onPressItem(id)}
-          style={{
-            backgroundColor: done ? "#1c9963" : "#fff",
-            borderColor: "#000",
-            borderWidth: 1,
-            padding: 8,
-          }}
-        >
-          <Text style={{ color: done ? "#fff" : "#000" }}>{itemDate}:  {value}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-}
+const Stack = createNativeStackNavigator();
 
 export default function App() {
 
+  // create table (if it doesn't already exist) to store movie/show data 
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        "drop table movies;"
-      );
-      tx.executeSql(
-        "create table if not exists movies (id integer primary key not null, movieName text);"
+        "create table if not exists movies (id integer primary key not null, movieName text, watched int);"
       );
     });
   }, []);
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <Items>
-
-        </Items>
-      </ScrollView>
-      <Ionicons style={styles.addButton} name='add-circle' size={100} color='green' />
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Home"
+      >
+        <Stack.Screen name="Home" component={HomeScreen} />
+				<Stack.Screen name="Add Movie" component={AddMovie} />
+      </Stack.Navigator>
       <StatusBar style="auto" />
-    </View>
+    </NavigationContainer>
   );
+
+
 }
 
 const styles = StyleSheet.create({
