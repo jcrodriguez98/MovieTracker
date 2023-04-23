@@ -27,11 +27,14 @@ function Items() {
   }
 
   return (
-    <View >
-      <Text>Jurassic Park</Text>
-      {items.map(({ id, movieName, watched }) => (
-        <TouchableOpacity>
-          <Text style={{ color: watched ? "#fff" : "#000" }}>{id} {movieName}</Text>
+    <View style={styles.sectionContainer}>
+      {items.map(({ id, movieName, streamingService, mediaType, watched }) => (
+        <TouchableOpacity
+          key={id} 
+          style={styles.details}>
+          <Text style={{ color: watched ? "#fff" : "#000" }}>Name: {movieName}</Text>
+          <Text>Type: {mediaType}</Text>
+          <Text>Where: {streamingService}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -60,5 +63,16 @@ const styles = StyleSheet.create({
   },
   addButton: {
     padding: 20
-  }
+  },
+  sectionContainer: {
+    marginTop: 30,
+    marginBottom: 16,
+    marginHorizontal: 16,
+  },
+  details: {
+    //backgroundColor: done ? "#1c9963" : "#fff",
+    borderColor: "#000",
+    borderWidth: 1,
+    padding: 8,
+  },
 });
