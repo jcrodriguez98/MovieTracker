@@ -12,7 +12,6 @@ function openDatabase() {
   }
 
   const db = SQLite.openDatabase("db.db");
-  console.log("openDatabase");
 
   return db;
 }

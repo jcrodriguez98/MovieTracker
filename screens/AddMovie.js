@@ -10,32 +10,23 @@ export default function AddMovie() {
   const [movieName, setMovieName] = useState(null);
   const [streamingService, setStreamingService] = useState(null);
   const [mediaType, setMediaType] = useState(null);
-  const [forceUpdate, forceUpdateId] = useForceUpdate();
 
   const add = (movieName, streamingService, mediaType) => {
     // check if text is empty
     if (movieName === null || movieName === "") {
-      console.log("text is null");
       return false;
     }
 
     db.transaction(
       (tx) => {
-        console.log("insert to db");
         tx.executeSql("insert into movies (movieName, streamingService, mediaType, watched) values (?, ?, ?, 0);", [movieName, streamingService, mediaType]);
         tx.executeSql("select * from movies;", [], (_, { rows }) =>
           console.log(JSON.stringify(rows))
         );
       },
       null,
-      forceUpdate
     );
   };
-
-  function useForceUpdate() {
-    const [value, setValue] = useState(0);
-    return [() => setValue(value + 1), value];
-  }
 
   return (
     <View style={styles.container}>
@@ -43,16 +34,19 @@ export default function AddMovie() {
         placeholder='Movie Name'
         onChangeText={text => setMovieName(text)}
         style={styles.input}
+        value={movieName}
       />
       <TextInput
         placeholder='Streaming Service'
         onChangeText={text => setStreamingService(text)}
         style={styles.input}
+        value={streamingService}
       />
       <TextInput
-        placeholder='Media Type'
+        placeholder='Type (TV/Movie)'
         onChangeText={text => setMediaType(text)}
         style={styles.input}
+        value={mediaType}
       />
       <Pressable
         style={styles.button}

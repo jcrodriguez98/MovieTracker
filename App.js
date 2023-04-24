@@ -21,7 +21,6 @@ export default function App() {
 
   // create table (if it doesn't already exist) to store movie/show data 
   useEffect(() => {
-    console.log("creating table");
     db.transaction((tx) => {
       tx.executeSql(
         "--drop table movies;"

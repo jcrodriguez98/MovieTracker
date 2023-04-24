@@ -10,20 +10,20 @@ function Items() {
 
   useEffect(() => {
     db.transaction((tx) => {
-      console.log("selecting movies");
       tx.executeSql(
         "select * from movies;", [],
         (_, { rows: { _array } }) => setItems(_array)
       );
     });
-  }, []);
+  }, [items]);
 
   if (items === null || items.length === 0) {
-    console.log("items is null")
-    return null;
-  }
-  else {
-    console.log("items not empty");
+    return (
+      <View style={styles.Container}>
+        <Text style={styles.text}>Add a Movie or TV Show!</Text>
+      </View>
+    );
+
   }
 
   return (
@@ -32,9 +32,9 @@ function Items() {
         <TouchableOpacity
           key={id} 
           style={styles.details}>
-          <Text style={{ color: watched ? "#fff" : "#000" }}>Name: {movieName}</Text>
-          <Text>Type: {mediaType}</Text>
-          <Text>Where: {streamingService}</Text>
+          <Text style={styles.detailsText}>Name: {movieName}</Text>
+          <Text style={styles.detailsText}>Type: {mediaType}</Text>
+          <Text style={styles.detailsText}>Where: {streamingService}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -70,9 +70,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   details: {
-    //backgroundColor: done ? "#1c9963" : "#fff",
     borderColor: "#000",
     borderWidth: 1,
-    padding: 8,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: 100,
+    paddingLeft: 100,
   },
+  detailsText: {
+    fontSize: 20
+  },
+  text: {
+    fontSize: 30,
+    color: 'gray',
+    paddingTop: 50,
+  }
 });
