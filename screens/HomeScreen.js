@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   addButton: {
-    padding: 20
+    padding: 20,
   },
   sectionContainer: {
     marginTop: 30,

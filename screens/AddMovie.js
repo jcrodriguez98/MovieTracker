@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Pressable, Image} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import openDatabase from '../database/database.js';
 
 const filmLogo = require("../assets/film.png");
@@ -10,6 +11,7 @@ export default function AddMovie() {
   const [movieName, setMovieName] = useState(null);
   const [streamingService, setStreamingService] = useState(null);
   const [mediaType, setMediaType] = useState(null);
+  const [genre, setGenre] = useState(null);
 
   const add = (movieName, streamingService, mediaType) => {
     // check if text is empty
@@ -31,7 +33,7 @@ export default function AddMovie() {
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder='Movie Name'
+        placeholder='TV/Movie Name'
         onChangeText={text => setMovieName(text)}
         style={styles.input}
         value={movieName}
@@ -48,6 +50,17 @@ export default function AddMovie() {
         style={styles.input}
         value={mediaType}
       />
+      <TextInput 
+        placeholder='Genre'
+        onChangeText={text => setGenre(text)}
+        style={styles.input}
+        value={genre}
+      />
+      <Picker>
+        <Picker.Item label='Movie'  value='Movie' />
+        <Picker.Item label='TV Show' value='TV' />
+      </Picker>
+
       <Pressable
         style={styles.button}
         onPress={() => {
