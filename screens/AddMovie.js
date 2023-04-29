@@ -13,7 +13,7 @@ export default function AddMovie() {
   const [mediaType, setMediaType] = useState(null);
   const [genre, setGenre] = useState(null);
 
-  const add = (movieName, streamingService, mediaType) => {
+  const add = (movieName, streamingService, mediaType, genre) => {
     // check if text is empty
     if (movieName === null || movieName === "") {
       return false;
@@ -21,7 +21,7 @@ export default function AddMovie() {
 
     db.transaction(
       (tx) => {
-        tx.executeSql("insert into movies (movieName, streamingService, mediaType, watched) values (?, ?, ?, 0);", [movieName, streamingService, mediaType]);
+        tx.executeSql("insert into movies (movieName, streamingService, mediaType, genre, watched) values (?, ?, ?, ?, 0);", [movieName, streamingService, mediaType, genre]);
         tx.executeSql("select * from movies;", [], (_, { rows }) =>
           console.log(JSON.stringify(rows))
         );
@@ -56,18 +56,16 @@ export default function AddMovie() {
         style={styles.input}
         value={genre}
       />
-      <Picker>
-        <Picker.Item label='Movie'  value='Movie' />
-        <Picker.Item label='TV Show' value='TV' />
-      </Picker>
+
 
       <Pressable
         style={styles.button}
         onPress={() => {
-          add(movieName, streamingService, mediaType);
+          add(movieName, streamingService, mediaType, genre);
           setMovieName(null);
           setStreamingService(null);
           setMediaType(null);
+          setGenre(null);
         }}
       >
         <Text style={styles.buttonText}>Add Movie</Text>

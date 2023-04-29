@@ -9,6 +9,7 @@ import HomeScreen from './screens/HomeScreen.js';
 import AddMovie from './screens/AddMovie.js';
 
 import openDatabase from './database/database.js';
+import DetailsScreen from './screens/Details.js';
 
 SplashScreen.preventAutoHideAsync();
 setTimeout(SplashScreen.hideAsync, 2000);
@@ -23,10 +24,10 @@ export default function App() {
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        "--drop table movies;"
+        "drop table movies;"
       );
       tx.executeSql(
-        "create table if not exists movies (id INTEGER primary key not null, movieName text, streamingService text, mediaType text, watched int);"
+        "create table if not exists movies (id INTEGER primary key not null, movieName text, streamingService text, mediaType text, genre text, watched int);"
       );
     });
   }, []);
@@ -47,6 +48,7 @@ export default function App() {
       >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Add Movie" component={AddMovie} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

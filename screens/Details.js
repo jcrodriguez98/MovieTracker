@@ -1,12 +1,23 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Pressable } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import openDatabase from '../database/database.js';
 
 const db = openDatabase;
 
+function GetItem( {movieID} ) { 
+const [ID, setID] = useState(null);
 
-export default function DetailsScreen({ navigation }) {
+  useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "select * from movies where id = ?;", [ID],
+        (_, { rows: { _array } }) => setID(_array)
+      );
+    });
+  }, [ID]);
+}
+
+export default function DetailsScreen() {
     return (
       <View style={styles.container}>
         <ScrollView>

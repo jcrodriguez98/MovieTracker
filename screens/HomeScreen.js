@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import openDatabase from '../database/database.js';
 
 const db = openDatabase;
 
-function Items() {
+function Items( {navigation} ) {
   const [items, setItems] = useState(null);
 
   useEffect(() => {
@@ -31,7 +31,9 @@ function Items() {
       {items.map(({ id, movieName, streamingService, mediaType, watched }) => (
         <TouchableOpacity
           key={id} 
-          style={styles.details}>
+          style={styles.details}
+          onPress={() => { navigation.navigate('Details', {movieID: id}) }}
+        >
           <Text style={styles.detailsText}>Name: {movieName}</Text>
           <Text style={styles.detailsText}>Type: {mediaType}</Text>
           <Text style={styles.detailsText}>Where: {streamingService}</Text>
@@ -45,7 +47,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Items>
+        <Items navigation={navigation}>
 
         </Items>
       </ScrollView>
