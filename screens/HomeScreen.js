@@ -28,11 +28,11 @@ function Items( {navigation} ) {
 
   return (
     <View style={styles.sectionContainer}>
-      {items.map(({ id, movieName, streamingService, mediaType, watched }) => (
+      {items.map(({ id, movieName, streamingService, mediaType, genre, watched }) => (
         <TouchableOpacity
           key={id} 
           style={styles.details}
-          onPress={() => { navigation.navigate('Details', {movieID: id}) }}
+          onPress={() => { navigation.navigate('Details', {id: id}) }}
         >
           <Text style={styles.detailsText}>Name: {movieName}</Text>
           <Text style={styles.detailsText}>Type: {mediaType}</Text>

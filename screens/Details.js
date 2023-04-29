@@ -1,27 +1,46 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import openDatabase from '../database/database.js';
 
 const db = openDatabase;
 
-function GetItem( {movieID} ) { 
-const [ID, setID] = useState(null);
+function SelectedMedia( {id} ) {
+  const [details, setDetails] = useState();
 
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        "select * from movies where id = ?;", [ID],
-        (_, { rows: { _array } }) => setID(_array)
+        "select * from movies where id = ?;", [id],
+        (_, { rows: { _array } }) => setDetails(_array)
+      );
+      tx.executeSql(
+        "select * from movies where id = ?;", [id],
+        (_, { rows }) => console.log(JSON.stringify(rows))
       );
     });
-  }, [ID]);
-}
+  }, [details]);
 
-export default function DetailsScreen() {
+  return (
+    <View style={styles.container}>
+      {details.map(({ id, movieName, streamingService, mediaType, genre, watched }) => (
+        <View>
+          <Text style={styles.detailsText}>Name: {movieName}</Text>
+          <Text style={styles.detailsText}>Type: {mediaType}</Text>
+          <Text style={styles.detailsText}>Where: {streamingService}</Text>
+          <Text style={styles.detailsText}>Genre: {genre}</Text>
+          <Text style={styles.detailsText}>Watched: {watched}</Text>
+        </View>
+      ))}
+    </View>
+  )
+} 
+
+export default function DetailsScreen( {route} ) {
+    const { id } = route.params;
+
     return (
       <View style={styles.container}>
-        <ScrollView>
-        </ScrollView>
+        <SelectedMedia id={id} />
       </View>
     );
   }

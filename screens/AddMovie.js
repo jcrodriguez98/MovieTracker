@@ -56,8 +56,6 @@ export default function AddMovie() {
         style={styles.input}
         value={genre}
       />
-
-
       <Pressable
         style={styles.button}
         onPress={() => {

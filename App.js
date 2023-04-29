@@ -24,7 +24,7 @@ export default function App() {
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        "drop table movies;"
+        "--drop table movies;"
       );
       tx.executeSql(
         "create table if not exists movies (id INTEGER primary key not null, movieName text, streamingService text, mediaType text, genre text, watched int);"
