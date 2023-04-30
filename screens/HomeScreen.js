@@ -23,7 +23,6 @@ function Items( {navigation} ) {
         <Text style={styles.text}>Add a Movie or TV Show!</Text>
       </View>
     );
-
   }
 
   return (

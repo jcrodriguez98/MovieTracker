@@ -1,30 +1,39 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import openDatabase from '../database/database.js';
 
 const db = openDatabase;
 
-function SelectedMedia( {id} ) {
-  const [details, setDetails] = useState();
+function Items( {id} ) {
+  let array = [];
+  const [items, setItems] = useState(array);
 
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
         "select * from movies where id = ?;", [id],
-        (_, { rows: { _array } }) => setDetails(_array)
+        (_, { rows: { _array } }) => setItems(_array)
       );
       tx.executeSql(
         "select * from movies where id = ?;", [id],
         (_, { rows }) => console.log(JSON.stringify(rows))
       );
     });
-  }, [details]);
+  }, []);
+
+  if (items === null || items.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>Fetching data...</Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      {details.map(({ id, movieName, streamingService, mediaType, genre, watched }) => (
-        <View>
-          <Text style={styles.detailsText}>Name: {movieName}</Text>
+    <View>
+      {items.map(({ id, movieName, streamingService, mediaType, genre, watched }) => (
+        <View key={(id)}>
+          <Text style={styles.detailsText}>Title: {movieName}</Text>
           <Text style={styles.detailsText}>Type: {mediaType}</Text>
           <Text style={styles.detailsText}>Where: {streamingService}</Text>
           <Text style={styles.detailsText}>Genre: {genre}</Text>
@@ -33,14 +42,17 @@ function SelectedMedia( {id} ) {
       ))}
     </View>
   )
-} 
+}
 
 export default function DetailsScreen( {route} ) {
     const { id } = route.params;
 
     return (
       <View style={styles.container}>
-        <SelectedMedia id={id} />
+        <ScrollView>
+          <Items id={id}>
+          </Items>
+        </ScrollView>
       </View>
     );
   }
