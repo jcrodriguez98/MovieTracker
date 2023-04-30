@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as SplashScreen from 'expo-splash-screen';
 
 import HomeScreen from './screens/HomeScreen.js';
-import AddMovie from './screens/AddMovie.js';
+import AddTitle from './screens/AddTitle.js';
 
 import openDatabase from './database/database.js';
 import DetailsScreen from './screens/Details.js';
@@ -24,10 +24,13 @@ export default function App() {
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        "--drop table movies;"
+        "--drop table if exists movies;"
       );
       tx.executeSql(
-        "create table if not exists movies (id INTEGER primary key not null, movieName text, streamingService text, mediaType text, genre text, watched int);"
+        "create table if not exists movies (id INTEGER primary key not null, title text, streamingService text, mediaType text, genre text, watched int);"
+      );
+      tx.executeSql(
+        "insert into movies (title, streamingService, mediaType, genre, watched) values ('Harry Potter and the Chamber of Secrets', 'HBO Max', 'Movie', 'Fantasy', 0);"
       );
     });
   }, []);
@@ -47,7 +50,7 @@ export default function App() {
         initialRouteName="Home"
       >
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Add Movie" component={AddMovie} />
+        <Stack.Screen name="Add Title" component={AddTitle} />
         <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
       <StatusBar style="auto" />

@@ -1,23 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Pressable, Image, Alert} from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import openDatabase from '../database/database.js';
 
 const filmLogo = require("../assets/film.png");
 
 const db = openDatabase;
 
-export default function AddMovie() {
-  const [movieName, setMovieName] = useState(null);
+export default function AddTitle() {
+  const [title, setTitle] = useState(null);
   const [streamingService, setStreamingService] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [genre, setGenre] = useState(null);
 
-  const validateEntries = (movieName, streamingService, mediaType, genre) => {
+  const validateEntries = (title, streamingService, mediaType, genre) => {
     let bool = true;
 
     // check if text is empty
-    if (movieName === null || movieName === "") {
+    if (title === null || title === "") {
       bool = false;
       Alert.alert("Error", 'Title is a required field.', [{text: 'OK'}]);
     }
@@ -36,13 +35,13 @@ export default function AddMovie() {
 
     return bool;
 
-  }
+  };
 
-  const insertRecord = (movieName, streamingService, mediaType, genre) => {
+  const insertRecord = (title, streamingService, mediaType, genre) => {
   
       db.transaction(
         (tx) => {
-          tx.executeSql("insert into movies (movieName, streamingService, mediaType, genre, watched) values (?, ?, ?, ?, 0);", [movieName, streamingService, mediaType, genre]);
+          tx.executeSql("insert into movies (title, streamingService, mediaType, genre, watched) values (?, ?, ?, ?, 0);", [title, streamingService, mediaType, genre]);
           tx.executeSql("select * from movies;", [], (_, { rows }) =>
             console.log(JSON.stringify(rows))
           );
@@ -51,26 +50,26 @@ export default function AddMovie() {
       );
   };
 
-  const add = (movieName, streamingService, mediaType, genre) => {
+  const add = (title, streamingService, mediaType, genre) => {
 
-    let bool = validateEntries(movieName, streamingService, mediaType, genre);
+    let bool = validateEntries(title, streamingService, mediaType, genre);
 
     if (bool) {
-      insertRecord(movieName, streamingService, mediaType, genre);
-      setMovieName(null);
+      insertRecord(title, streamingService, mediaType, genre);
+      setTitle(null);
       setStreamingService(null);
       setMediaType(null);
       setGenre(null);
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder='TV/Movie Name'
-        onChangeText={text => setMovieName(text)}
+        placeholder='Title'
+        onChangeText={text => setTitle(text)}
         style={styles.input}
-        value={movieName}
+        value={title}
       />
       <TextInput
         placeholder='Streaming Service'
@@ -93,10 +92,10 @@ export default function AddMovie() {
       <Pressable
         style={styles.button}
         onPress={() => {
-          add(movieName, streamingService, mediaType, genre);
+          add(title, streamingService, mediaType, genre);
         }}
       >
-        <Text style={styles.buttonText}>Add Movie</Text>
+        <Text style={styles.buttonText}>Add Title</Text>
       </Pressable>
       <Image source={filmLogo} style={styles.image} />
     </View>
@@ -107,7 +106,7 @@ export default function AddMovie() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#bfcdb4',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   image: {
-    height: 375,
-    width: 350,
+    height: 275,
+    width: 260,
   },
 });

@@ -11,7 +11,7 @@ function Items( {navigation} ) {
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        "select * from movies;", [],
+        "select id, title, mediaType, genre from movies;", [],
         (_, { rows: { _array } }) => setItems(_array)
       );
     });
@@ -19,23 +19,22 @@ function Items( {navigation} ) {
 
   if (items === null || items.length === 0) {
     return (
-      <View style={styles.Container}>
-        <Text style={styles.text}>Add a Movie or TV Show!</Text>
+      <View style={styles.container}>
+        <Text style={styles.text}>Add a movie or TV show!</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.sectionContainer}>
-      {items.map(({ id, movieName, streamingService, mediaType, genre, watched }) => (
+      {items.map(({ id, title, mediaType, genre }) => (
         <TouchableOpacity
           key={id} 
           style={styles.details}
           onPress={() => { navigation.navigate('Details', {id: id}) }}
         >
-          <Text style={styles.detailsText}>Name: {movieName}</Text>
-          <Text style={styles.detailsText}>Type: {mediaType}</Text>
-          <Text style={styles.detailsText}>Where: {streamingService}</Text>
+          <Text style={styles.titleText}>{title}</Text>
+          <Text style={styles.detailsText}>{mediaType}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -50,7 +49,7 @@ export default function HomeScreen({ navigation }) {
 
         </Items>
       </ScrollView>
-      <Ionicons style={styles.addButton} name='add-circle' size={100} color='green' onPress={() => { navigation.navigate('Add Movie') }} />
+      <Ionicons style={styles.addButton} name='add-circle' size={100} color='#58ea0e' onPress={() => { navigation.navigate('Add Title') }} />
     </View>
   );
 }
@@ -58,9 +57,9 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#5f665a',
   },
   addButton: {
     padding: 20,
@@ -68,18 +67,23 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 30,
     marginBottom: 16,
-    marginHorizontal: 16,
   },
   details: {
     borderColor: "#000",
     borderWidth: 1,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingRight: 100,
-    paddingLeft: 100,
+    padding: 15,
+    marginTop: 1,
+    marginRight: 5,
+    marginLeft: 5,
+    backgroundColor: '#bfcdb4',
+    borderRadius: 20,
+  },
+  titleText: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   detailsText: {
-    fontSize: 20
+    fontSize: 15
   },
   text: {
     fontSize: 30,
