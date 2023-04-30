@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Linking } from 'react-native';
 import openDatabase from '../database/database.js';
 
 const db = openDatabase;
@@ -13,10 +13,6 @@ function Items( {id} ) {
       tx.executeSql(
         "select * from movies where id = ?;", [id],
         (_, { rows: { _array } }) => setItems(_array)
-      );
-      tx.executeSql(
-        "select * from movies where id = ?;", [id],
-        (_, { rows }) => console.log(JSON.stringify(rows))
       );
     });
   }, []);
@@ -33,11 +29,13 @@ function Items( {id} ) {
     <View>
       {items.map(({ id, movieName, streamingService, mediaType, genre, watched }) => (
         <View key={(id)}>
-          <Text style={styles.detailsText}>Title: {movieName}</Text>
+          <Text style={styles.title}>Title: {movieName}</Text>
           <Text style={styles.detailsText}>Type: {mediaType}</Text>
           <Text style={styles.detailsText}>Where: {streamingService}</Text>
           <Text style={styles.detailsText}>Genre: {genre}</Text>
           <Text style={styles.detailsText}>Watched: {watched}</Text>
+
+          <Text style={styles.link} onPress={() => Linking.openURL('https://www.imdb.com/find/?q=' + movieName)}>Find on IMDb</Text>
         </View>
       ))}
     </View>
@@ -49,10 +47,7 @@ export default function DetailsScreen( {route} ) {
 
     return (
       <View style={styles.container}>
-        <ScrollView>
-          <Items id={id}>
-          </Items>
-        </ScrollView>
+        <Items id={id} />
       </View>
     );
   }
@@ -64,15 +59,18 @@ export default function DetailsScreen( {route} ) {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    addButton: {
-      padding: 20
-    },
     detailsText: {
-      fontSize: 20
-    },
-    text: {
       fontSize: 30,
-      color: 'gray',
-      paddingTop: 50,
-    }
+      padding: 10
+    },
+    title: {
+      fontSize: 40,
+      color: '#000',
+      paddingBottom: 50,
+    },
+    link: {
+      color: 'blue',
+      fontSize: 30,
+      padding: 10
+    },
   });
