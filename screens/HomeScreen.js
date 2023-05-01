@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 30,
-    color: 'gray',
+    color: '#fff',
     paddingTop: 50,
   }
 });
